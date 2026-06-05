@@ -3,12 +3,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { jwtSecret, jwtExpiresIn } = require("../config/auth");
 
-<<<<<<< HEAD
-/**
- * LOGIN
- */
-=======
->>>>>>> dae3950 (Add backend implementation)
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -23,15 +17,9 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-<<<<<<< HEAD
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-=======
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
->>>>>>> dae3950 (Add backend implementation)
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -56,7 +44,6 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-<<<<<<< HEAD
     return res.status(500).json({
       message: "Login failed",
       error: error.message,
@@ -64,9 +51,6 @@ const login = async (req, res) => {
   }
 };
 
-/**
- * REGISTER (public signup)
- */
 const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -106,17 +90,10 @@ const register = async (req, res) => {
       message: "Registration failed",
       error: error.message,
     });
-=======
-    return res.status(500).json({ message: "Login failed", error: error.message });
->>>>>>> dae3950 (Add backend implementation)
   }
 };
 
 module.exports = {
   login,
-<<<<<<< HEAD
   register,
 };
-=======
-};
->>>>>>> dae3950 (Add backend implementation)

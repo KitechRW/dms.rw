@@ -9,13 +9,6 @@ const connectDB = require("./src/config/db");
 const seedUsersOnFirstRun = require("./src/seed/seedUsers");
 const authRoutes = require("./src/routes/authRoutes");
 const protectedRoutes = require("./src/routes/protectedRoutes");
-const userRoutes = require("./src/routes/userRoutes");
-const milkCollectionRoutes = require("./src/routes/milkCollectionRoutes");
-
-const app = express();
-
-app.use("/api/users", userRoutes);
-
 
 const app = express();
 
@@ -28,7 +21,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
-app.use("/api/milk-collections", milkCollectionRoutes);
 
 const startServer = async () => {
   await connectDB();
