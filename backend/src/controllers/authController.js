@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { jwtSecret, jwtExpiresIn } = require("../config/auth");
 
+/**
+ * LOGIN
+ */
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -51,6 +54,9 @@ const login = async (req, res) => {
   }
 };
 
+/**
+ * REGISTER (public signup)
+ */
 const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
