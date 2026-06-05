@@ -18,110 +18,80 @@ export default function UsersPage() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  
-  const fetchUsers = async () => {
-    try {
-      const res = await fetch("/api/users");
-      const data = await res.json();
+  // MOCK DATA (frontend only)
+  const mockUsers = [
+    {
+      _id: "1",
+      first_name: "John",
+      last_name: "Doe",
+      email: "john@example.com",
+      role: "admin",
+    },
+    {
+      _id: "2",
+      first_name: "Jane",
+      last_name: "Smith",
+      email: "jane@example.com",
+      role: "superadmin",
+    },
+  ];
 
-      if (data.success) {
-        setUsers(data.users || []);
-      } else {
-        toast.error("Failed to fetch users");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Server error");
-    }
+  // Load users (mock)
+  const fetchUsers = () => {
+    setUsers(mockUsers);
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  
-  const handleCreate = async () => {
+  // CREATE USER (frontend only)
+  const handleCreate = () => {
     if (!formData.first_name || !formData.last_name || !formData.email) {
       toast.error("All fields are required");
       return;
     }
 
-    try {
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    const newUser = {
+      _id: Date.now().toString(),
+      ...formData,
+    };
 
-      const data = await res.json();
+    setUsers((prev) => [...prev, newUser]);
 
-      if (data.success) {
-        toast.success("User created");
-        setFormOpen(false);
-        setFormData({
-          first_name: "",
-          last_name: "",
-          email: "",
-          role: "admin",
-        });
-        fetchUsers();
-      } else {
-        toast.error(data.message || "Creation failed");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Server error");
-    }
+    toast.success("User created");
+
+    setFormOpen(false);
+
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      role: "admin",
+    });
   };
 
- 
-  const handleDelete = async (id) => {
+  // DELETE USER (frontend only)
+  const handleDelete = (id) => {
     if (!confirm("Delete this user?")) return;
 
-    try {
-      const res = await fetch("/api/users", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        toast.success("User deleted");
-        fetchUsers();
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Delete failed");
-    }
+    setUsers((prev) => prev.filter((u) => u._id !== id));
+    toast.success("User deleted");
   };
 
-  
-  const handleUpdate = async () => {
-    try {
-      const res = await fetch("/api/users", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editingUser),
-      });
+  // UPDATE USER (frontend only)
+  const handleUpdate = () => {
+    setUsers((prev) =>
+      prev.map((u) =>
+        u._id === editingUser._id ? editingUser : u
+      )
+    );
 
-      const data = await res.json();
-
-      if (data.success) {
-        toast.success("User updated");
-        setEditingUser(null);
-        fetchUsers();
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Update failed");
-    }
+    toast.success("User updated");
+    setEditingUser(null);
   };
 
-  
+  // SEARCH FILTER
   const filteredUsers = users.filter((u) => {
     const term = searchTerm.toLowerCase();
 
@@ -135,7 +105,8 @@ export default function UsersPage() {
 
   return (
     <div className="p-6">
-     
+
+      {/* HEADER */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Users List</h2>
 
@@ -147,7 +118,7 @@ export default function UsersPage() {
         </button>
       </div>
 
-      
+      {/* SEARCH */}
       <div className="mb-4 flex justify-center">
         <input
           placeholder="Search name, email or role..."
@@ -157,7 +128,7 @@ export default function UsersPage() {
         />
       </div>
 
-      
+      {/* TABLE */}
       <div className="bg-white rounded shadow overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-100">
@@ -187,18 +158,18 @@ export default function UsersPage() {
 
                   <td className="p-3 flex gap-3">
                     <button
-  onClick={() => handleDelete(u._id)}
-  className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
->
-  <FaTrash />
-</button>
+                      onClick={() => handleDelete(u._id)}
+                      className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
+                    >
+                      <FaTrash />
+                    </button>
 
-<button
-  onClick={() => setEditingUser(u)}
-  className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
->
-  <FaPencilAlt />
-</button>
+                    <button
+                      onClick={() => setEditingUser(u)}
+                      className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
+                    >
+                      <FaPencilAlt />
+                    </button>
                   </td>
                 </tr>
               ))
@@ -207,7 +178,7 @@ export default function UsersPage() {
         </table>
       </div>
 
-     
+      {/* CREATE MODAL */}
       {formOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
           <div className="bg-white p-6 rounded w-[400px] shadow-lg">
@@ -270,7 +241,7 @@ export default function UsersPage() {
         </div>
       )}
 
-     
+      {/* EDIT MODAL */}
       {editingUser && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
           <div className="bg-white p-6 rounded w-[400px] shadow-lg">
@@ -341,6 +312,7 @@ export default function UsersPage() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

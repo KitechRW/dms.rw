@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { postData } from "@/lib/api";
+
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
 
     try {
-      await postData("/api/forgot-password", { email });
+      setMessage("Mock: reset link sent (frontend only)");
       setMessage("We sent a reset link to your email");
     } catch (err) {
       setError(err.message || "Something went wrong");
@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
         <p className="text-green-600 text-sm mb-4 text-center">{message}</p>
       ) : (
         <form onSubmit={handleSubmit}>
-          {/* EMAIL */}
+          
           <div className="mb-6">
             <label className="block mb-1 text-sm">Email</label>
             <input
@@ -53,7 +53,7 @@ export default function ForgotPasswordPage() {
             />
           </div>
 
-          {/* BUTTON */}
+          
           <button
             type="submit"
             disabled={loading}
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
         </form>
       )}
 
-      {/* BACK TO LOGIN */}
+      
       <p className="text-center text-sm mt-4">
         Remember your password?{" "}
         <Link
