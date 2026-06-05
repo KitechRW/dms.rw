@@ -16,6 +16,9 @@ const milkCollectionRoutes = require("./src/routes/milkCollectionRoutes");
 const cooperativeRoutes = require("./src/routes/cooperativeRoutes");
 
 const app = express();
+const pendingActionsRoutes = require("./src/routes/pendingActionsRoutes");
+
+app.use("/api", pendingActionsRoutes);
 
 
 app.use(cors());
