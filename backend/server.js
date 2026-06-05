@@ -16,6 +16,9 @@ const app = express();
 
 app.use("/api/users", userRoutes);
 
+
+const app = express();
+
 app.use(cors());
 app.use(express.json());
 
