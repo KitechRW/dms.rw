@@ -10,7 +10,7 @@ export default function Sidebar({ activePage, setActivePage }) {
     <div
       className={`${
         collapsed ? "w-20" : "w-64"
-      } bg-gray-70 h-full transition-all duration-300`}   
+      } bg-gray-70 h-full transition-all duration-300`}   // ❌ removed border-r
     >
       
       <div className="flex items-center justify-between p-4">

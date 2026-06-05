@@ -1,113 +1,112 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { MailerSend } from "mailersend";
 
-export default function ResetPasswordPage() {
-  const router = useRouter();
+const mailerSend = new MailerSend({ apiKey: process.env.MAILERSEND_API_KEY });
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+export const sendCredentialsEmail = async (toEmail, password, resetLink) => {
+  await mailerSend.email.send({
+    from: { email: process.env.EMAIL_FROM, name: process.env.EMAIL_FROM_NAME },
+    to: [{ email: toEmail }],
+    subject: "Your account credentials",
+    html: `
+      <p>Hello,</p>
+      <p>Your account has been created.</p>
+      <p>Email: ${toEmail}</p>
+      <p>Password: ${password}</p>
+      <p>Change your password here: <a href="${resetLink}">Reset Password</a></p>
+    `,
+  });
+};
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+export default function AdminsPage() {
+  const [admins, setAdmins] = useState([]);
+  const [open, setOpen] = useState(false);
 
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleReset = (e) => {
-    e.preventDefault();
-    setError("");
-    setMessage("");
+  const fetchAdmins = async () => {
+    const res = await fetch("/api/admins");
+    const data = await res.json();
+    setAdmins(data.admins || []);
+  };
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
 
-    setLoading(true);
+  const handleCreate = async () => {
+    await fetch("/api/admins", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email }),
+    });
 
-    setTimeout(() => {
-      setMessage("Password updated successfully (frontend only)");
-
-      setLoading(false);
-
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
-    }, 1000);
+    setOpen(false);
+    setName("");
+    setEmail("");
+    fetchAdmins();
   };
 
   return (
-    <>
-      <h2 className="text-xl font-bold mb-5 text-center text-black">
-        Reset Password
-      </h2>
+    <div className="p-6">
+      {/* HEADER */}
+      <div className="flex justify-between mb-4">
+        <h2 className="text-xl font-semibold">Users</h2>
 
-      {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+        <button
+          onClick={() => setOpen(true)}
+          className="bg-sky-600 text-white px-4 py-2 rounded-lg"
+        >
+          + Create User
+        </button>
+      </div>
 
-      {message && (
-        <p className="text-green-600 text-sm mb-4 text-center">{message}</p>
-      )}
+      {/* TABLE */}
+      <div className="bg-white rounded-xl shadow">
+        {admins.map((a) => (
+          <div key={a._id} className="p-3 border-b">
+            {a.name} - {a.email}
+          </div>
+        ))}
+      </div>
 
-      {!message && (
-        <form onSubmit={handleReset}>
-          
-          
-          <div className="mb-4">
-            <label className="block mb-1 text-sm">New Password</label>
+      {/* MODAL */}
+      {open && (
+        <div className="fixed inset-0 bg-black/30 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-xl w-96">
+            <h3 className="mb-4 font-semibold">Create Admin</h3>
 
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 border rounded pr-10 focus:outline-none focus:ring-2 focus:ring-sky-400"
-                required
-              />
+            <input
+              placeholder="Name"
+              className="border p-2 w-full mb-3"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
 
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+            <input
+              placeholder="Email"
+              className="border p-2 w-full mb-4"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setOpen(false)}>Cancel</button>
+              <button
+                onClick={handleCreate}
+                className="bg-sky-600 text-white px-4 py-2 rounded"
               >
-                👁️
-              </span>
+                Create
+              </button>
             </div>
           </div>
-
-         
-          <div className="mb-6">
-            <label className="block mb-1 text-sm">Confirm Password</label>
-
-            <div className="relative">
-              <input
-                type={showConfirm ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-2 border rounded pr-10 focus:outline-none focus:ring-2 focus:ring-sky-400"
-                required
-              />
-
-              <span
-                onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-              >
-                👁️
-              </span>
-            </div>
-          </div>
-
-          
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full p-2 rounded text-white font-semibold bg-sky-600 hover:bg-sky-700"
-          >
-            {loading ? "Updating..." : "Update Password"}
-          </button>
-        </form>
+        </div>
       )}
-    </>
+    </div>
   );
 }

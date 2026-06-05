@@ -18,7 +18,7 @@ export default function ResetPasswordPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
@@ -30,16 +30,26 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
 
-    
-    setTimeout(() => {
-      setMessage("Password updated successfully (frontend only)");
+    try {
+      const res = await fetch("/api/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password }),
+      });
 
-      setLoading(false);
+      const data = await res.json();
 
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
-    }, 1000);
+      if (data.success) {
+        setMessage("Password updated successfully");
+        setTimeout(() => router.push("/"), 2000);
+      } else {
+        setError(data.message);
+      }
+    } catch {
+      setError("Something went wrong");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -59,7 +69,6 @@ export default function ResetPasswordPage() {
       {!message && (
         <form onSubmit={handleReset}>
           
-
           <div className="mb-4">
             <label className="block mb-1 text-sm">New Password</label>
 
@@ -82,7 +91,7 @@ export default function ResetPasswordPage() {
             </div>
           </div>
 
-         
+          
           <div className="mb-6">
             <label className="block mb-1 text-sm">Confirm Password</label>
 
@@ -105,7 +114,7 @@ export default function ResetPasswordPage() {
             </div>
           </div>
 
-          
+         
           <button
             type="submit"
             disabled={loading}
