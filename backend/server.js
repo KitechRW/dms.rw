@@ -9,8 +9,11 @@ const connectDB = require("./src/config/db");
 const seedUsersOnFirstRun = require("./src/seed/seedUsers");
 const authRoutes = require("./src/routes/authRoutes");
 const protectedRoutes = require("./src/routes/protectedRoutes");
+const userRoutes = require("./src/routes/userRoutes");
 
 const app = express();
+
+app.use("/api/users", userRoutes);
 
 app.use(cors());
 app.use(express.json());
