@@ -1,7 +1,9 @@
+require("dotenv").config();
+
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-require("dotenv").config();
+
 
 const express = require("express");
 const cors = require("cors");
@@ -11,26 +13,25 @@ const authRoutes = require("./src/routes/authRoutes");
 const protectedRoutes = require("./src/routes/protectedRoutes");
 const userRoutes = require("./src/routes/userRoutes");
 const milkCollectionRoutes = require("./src/routes/milkCollectionRoutes");
-
-const app = express();
-const pendingActionsRoutes = require("./src/routes/pendingActionsRoutes");
 const farmerStatementRoutes = require("./src/routes/farmerStatementRoutes");
-
-app.use("/api", farmerStatementRoutes);
-
-app.use("/api", pendingActionsRoutes);
-
-app.use("/api/users", userRoutes);
+const pendingActionsRoutes = require("./src/routes/pendingActionsRoutes");
+const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
+app.use("/api/protected", protectedRoutes);
+app.use("/api/users", userRoutes);
+app.use("api/milk-collections", milkCollectionRoutes);
+app.use("/api", farmerStatementRoutes);
+app.use("/api", pendingActionsRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "API running" });
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/protected", protectedRoutes);
+
 app.use("/api/milk-collections", milkCollectionRoutes);
 
 const startServer = async () => {
