@@ -47,7 +47,42 @@ const createCooperative = async (req, res) => {
     });
   }
 };
+  const getCooperatives = async (req, res) => {
+  try {
+    const { search, location } = req.query;
+
+    const query = {};
+
+    if (search) {
+      query.name = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    if (location) {
+      query.location = {
+        $regex: location,
+        $options: "i",
+      };
+    }
+
+    const cooperatives = await Cooperative.find(query);
+
+    return res.status(200).json({
+      count: cooperatives.length,
+      cooperatives,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to fetch cooperatives",
+      error: error.message,
+    });
+  }
+};
+
 
 module.exports = {
   createCooperative,
+  getCooperatives,
 };
