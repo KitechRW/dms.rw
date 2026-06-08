@@ -5,9 +5,11 @@ const bcrypt = require("bcrypt");
 const createUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
-
-    if (!name || !email || !password || !role) {
-      return res.status(400).json({ message: "All fields are required" });
+   
+    if (req.user.role === "operator" && role !== "farmer") {
+      return res.status(403).json({
+        message: "Operators can only create farmers",
+      });
     }
 
     const existingUser = await User.findOne({
