@@ -22,10 +22,19 @@ const milkCollectionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
-      trim: true,
-      maxlength: 50,
+       enum: ["pending", "approved", "rejected"],
+      default: "pending",
+      index: true,
     },
+
+  
+    paymentStatus: {
+      type: String,
+      enum: ["unpaid", "paid"],
+      default: "unpaid",
+      index: true,
+    },
+
     notes: {
       type: String,
       trim: true,

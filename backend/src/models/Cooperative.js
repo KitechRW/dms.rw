@@ -27,6 +27,12 @@ const cooperativeSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "suspended"],
+      default: "active",
+      index: true
+    }
   },
   { timestamps: true }
 );
