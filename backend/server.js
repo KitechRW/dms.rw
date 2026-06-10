@@ -14,6 +14,9 @@ const milkCollectionRoutes = require("./src/routes/milkCollectionRoutes");
 
 const app = express();
 const pendingActionsRoutes = require("./src/routes/pendingActionsRoutes");
+const farmerStatementRoutes = require("./src/routes/farmerStatementRoutes");
+
+app.use("/api", farmerStatementRoutes);
 
 app.use("/api", pendingActionsRoutes);
 
