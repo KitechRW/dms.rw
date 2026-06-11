@@ -12,7 +12,7 @@ const {
 
 const router = express.Router();
 
-router.post("/", authenticate, authorizeRoles("admin"), createUser);
+router.post("/", authenticate, authorizeRoles("admin, operator"), createUser);
 router.get("/", authenticate, authorizeRoles("admin"), getUsers);
 router.get("/:id", authenticate, authorizeRoles("admin"), getUserById);
 
