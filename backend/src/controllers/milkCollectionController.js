@@ -36,14 +36,17 @@ const buildMilkCollectionFilter = (req) => {
     filter.operator = req.user.sub;
   }
 
-  if (cooperative) {
-    if (typeof cooperative !== "string" || !cooperative.trim()) {
-      return { error: "Invalid cooperative filter" };
-    }
-
-    filter.cooperative = new RegExp(`^${escapeRegex(cooperative.trim())}$`, "i");
+   if (cooperative) {
+  if (typeof cooperative !== "string" || !cooperative.trim()) {
+    return { error: "Invalid cooperative filter" };
   }
 
+  if (!mongoose.isValidObjectId(cooperative)) {
+    return { error: "Invalid cooperative filter" };
+  }
+
+  filter.cooperative = cooperative = mongoose.Types.ObjectId(cooperative);
+}
   if (status) {
     if (typeof status !== "string" || !status.trim()) {
       return { error: "Invalid status filter" };
@@ -81,6 +84,7 @@ const buildMilkCollectionFilter = (req) => {
 const populateCollectionUsers = [
   { path: "farmer", select: "name email role" },
   { path: "operator", select: "name email role" },
+  { path: "cooperative", select: "name" }
 ];
 
 const createMilkCollection = async (req, res) => {
@@ -115,12 +119,6 @@ const createMilkCollection = async (req, res) => {
       return res.status(400).json({ message: "Status must be a non-empty string" });
     }
 
-    if (typeof cooperative !== "string" || !cooperative.trim()) {
-      return res.status(400).json({
-        message: "Cooperative must be a non-empty string",
-      });
-    }
-
     if (notes !== undefined && typeof notes !== "string") {
       return res.status(400).json({ message: "Notes must be a string" });
     }
@@ -142,7 +140,7 @@ const createMilkCollection = async (req, res) => {
 
     const collection = await MilkCollection.create({
       farmer: farmerUser._id,
-      cooperative: cooperative.trim(),
+      cooperative,
       volume: numericVolume,
       status: status.trim(),
       notes: notes?.trim() || "",
