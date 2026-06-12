@@ -1,4 +1,5 @@
 const { ZodError } = require("zod");
+const { errorResponse } = require("../utils/apiResponse");
 
 const validate = (schema) => (req, res, next) => {
   try {
@@ -6,12 +7,13 @@ const validate = (schema) => (req, res, next) => {
     next();
   } catch (error) {
     if (error instanceof ZodError) {
-      const message = error.issues[0]?.message;
-
-      return res.status(400).json({
-        message,
-      });
-    }
+  return res.status(400).json(
+    errorResponse(
+      error.issues[0].message,
+      "VALIDATION_ERROR",
+    )
+  );
+}
 
     return res.status(500).json({
       message: "Internal server error",

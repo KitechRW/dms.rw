@@ -33,6 +33,15 @@ app.get("/", (req, res) => {
 
 
 app.use("/api/milk-collections", milkCollectionRoutes);
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Not Found",
+    code: "NOT_FOUND",
+    errors: null,
+    data: null,
+  });
+});
 
 const startServer = async () => {
   await connectDB();
