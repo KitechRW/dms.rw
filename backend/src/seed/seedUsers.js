@@ -18,7 +18,11 @@ const seedUsersOnFirstRun = async () => {
   try {
     console.log(" Seed started...");
 
-    await User.deleteMany();
+   const exists = await User.countDocuments();
+if (exists > 0) {
+  console.log("Seed skipped - data already exists");
+  return;
+}
     await Cooperative.deleteMany();
     await MilkCollection.deleteMany();
 
@@ -51,11 +55,13 @@ const seedUsersOnFirstRun = async () => {
         status: "active"
       }
     ]);
+     const kigaliCoop = createdCoops[0];
+    const easternCoop = createdCoops[1];
 
     await MilkCollection.insertMany([
       {
         farmer: farmer._id,
-        cooperative: "Kigali Dairy Cooperative",
+        cooperative: kigaliCoop._id,
         volume: 10,
         status: "pending",
         paymentStatus: "unpaid",
@@ -63,7 +69,7 @@ const seedUsersOnFirstRun = async () => {
       },
       {
         farmer: farmer._id,
-        cooperative: "Eastern Milk Cooperative",
+        cooperative: easternCoop._id,
         volume: 20,
         status: "approved",
         paymentStatus: "paid",

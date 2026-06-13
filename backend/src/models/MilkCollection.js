@@ -9,10 +9,9 @@ const milkCollectionSchema = new mongoose.Schema(
       index: true,
     },
     cooperative: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cooperative",
       required: true,
-      trim: true,
-      maxlength: 150,
       index: true,
     },
     volume: {

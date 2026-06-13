@@ -1,3 +1,4 @@
+const { successResponse, errorResponse } = require("../utils/apiResponse");
 const mongoose = require("mongoose");
 const MilkCollection = require("../models/MilkCollection");
 const User = require("../models/User");
@@ -36,21 +37,34 @@ const buildMilkCollectionFilter = (req) => {
     filter.operator = req.user.sub;
   }
 
-  if (cooperative) {
-    if (typeof cooperative !== "string" || !cooperative.trim()) {
-      return { error: "Invalid cooperative filter" };
-    }
-
-    filter.cooperative = new RegExp(`^${escapeRegex(cooperative.trim())}$`, "i");
+ if (cooperative) {
+  if (typeof cooperative !== "string" || !cooperative.trim()) {
+    return {
+  error: {
+    message: "Invalid cooperative filter",
+    code: "INVALID_COOPERATIVE_FILTER"
+  }
+};
   }
 
-  if (status) {
-    if (typeof status !== "string" || !status.trim()) {
-      return { error: "Invalid status filter" };
-    }
-
-    filter.status = new RegExp(`^${escapeRegex(status.trim())}$`, "i");
+  if (!mongoose.isValidObjectId(cooperative)) {
+    return { error: "Invalid cooperative filter" };
   }
+
+  filter.cooperative = new mongoose.Types.ObjectId(cooperative);
+}
+if (status) {
+  if (typeof status !== "string" || !status.trim()) {
+    return {
+  error: errorResponse(
+    "Invalid cooperative filter",
+    "INVALID_COOPERATIVE_FILTER"
+  )
+};
+  }
+
+  filter.status = new RegExp(`^${escapeRegex(status.trim())}$`, "i");
+}
 
   const parsedStartDate = parseDateBoundary(startDate);
   const parsedEndDate = parseDateBoundary(endDate, true);
@@ -81,6 +95,7 @@ const buildMilkCollectionFilter = (req) => {
 const populateCollectionUsers = [
   { path: "farmer", select: "name email role" },
   { path: "operator", select: "name email role" },
+  { path: "cooperative", select: "name" }
 ];
 
 const createMilkCollection = async (req, res) => {
@@ -94,9 +109,9 @@ const createMilkCollection = async (req, res) => {
       volume === null ||
       !status
     ) {
-      return res.status(400).json({
-        message: "Farmer, cooperative, volume, and status are required",
-      });
+      return res
+    .status(404)
+    .json(errorResponse(""));
     }
 
     if (!mongoose.isValidObjectId(farmer)) {
@@ -115,12 +130,6 @@ const createMilkCollection = async (req, res) => {
       return res.status(400).json({ message: "Status must be a non-empty string" });
     }
 
-    if (typeof cooperative !== "string" || !cooperative.trim()) {
-      return res.status(400).json({
-        message: "Cooperative must be a non-empty string",
-      });
-    }
-
     if (notes !== undefined && typeof notes !== "string") {
       return res.status(400).json({ message: "Notes must be a string" });
     }
@@ -131,18 +140,20 @@ const createMilkCollection = async (req, res) => {
     ]);
 
     if (!farmerUser) {
-      return res.status(404).json({ message: "Farmer not found" });
+      return res
+  .status(404)
+  .json(errorResponse("Farmer not found", "FARMER_NOT_FOUND"));
     }
 
     if (!operatorUser) {
       return res
-        .status(403)
-        .json({ message: "Operator access is no longer valid" });
+  .status(403)
+  .json(errorResponse("Operator access is no longer valid", "FORBIDDEN"));
     }
 
     const collection = await MilkCollection.create({
       farmer: farmerUser._id,
-      cooperative: cooperative.trim(),
+      cooperative,
       volume: numericVolume,
       status: status.trim(),
       notes: notes?.trim() || "",
@@ -151,22 +162,31 @@ const createMilkCollection = async (req, res) => {
 
     await collection.populate(populateCollectionUsers);
 
-    return res.status(201).json({
-      message: "Milk collection saved successfully",
-      collection,
-    });
+    return res.status(201).json(
+  successResponse(
+    "Milk collection saved successfully",
+    "MILK_COLLECTION_CREATED",
+    collection
+  )
+);
   } catch (error) {
     if (error.name === "ValidationError") {
-      return res.status(400).json({
-        message: "Invalid milk collection data",
-        error: error.message,
-      });
+      return res.status(201).json(
+  successResponse(
+    "Milk collection saved successfully",
+    "MILK_COLLECTION_CREATED",
+    collection
+  )
+);
     }
 
-    return res.status(500).json({
-      message: "Failed to save milk collection",
-      error: error.message,
-    });
+    return res.status(500).json(
+      errorResponse(
+    "Failed to save milk collection",
+    "INTERNAL_SERVER_ERROR",
+    error.message
+  )
+);
   }
 };
 
@@ -175,7 +195,10 @@ const getMilkCollections = async (req, res) => {
     const { filter, error } = buildMilkCollectionFilter(req);
 
     if (error) {
-      return res.status(400).json({ message: error });
+       return res
+    .status(400)
+    .json(errorResponse(error.message, error.code));
+
     }
 
     const page = Math.max(Number.parseInt(req.query.page, 10) || 1, 1);
