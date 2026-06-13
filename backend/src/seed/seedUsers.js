@@ -18,7 +18,11 @@ const seedUsersOnFirstRun = async () => {
   try {
     console.log(" Seed started...");
 
-    await User.deleteMany();
+   const exists = await User.countDocuments();
+if (exists > 0) {
+  console.log("Seed skipped - data already exists");
+  return;
+}
     await Cooperative.deleteMany();
     await MilkCollection.deleteMany();
 

@@ -9,6 +9,12 @@ const {
   authorizeRoles,
 } = require("../middleware/authMiddleware");
 
+const validate = require("../middleware/validate");
+
+const {
+  milkCollectionQuerySchema,
+
+} = require("../validations/userValidations");
 const router = express.Router();
 
 router.post(
@@ -21,7 +27,7 @@ router.post(
 router.get(
   "/recent",
   authenticate,
-  authorizeRoles("operator", "admin"),
+  authorizeRoles("operator"),
   getRecentMilkCollections
 );
 
@@ -29,6 +35,7 @@ router.get(
   "/",
   authenticate,
   authorizeRoles("operator", "admin"),
+  validate(milkCollectionQuerySchema, "query"),
   getMilkCollections
 );
 
