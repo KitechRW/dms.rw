@@ -3,6 +3,7 @@ const {
   createMilkCollection,
   getMilkCollections,
   getRecentMilkCollections,
+  exportMilkCollectionsCSV
 } = require("../controllers/milkCollectionController");
 const {
   authenticate,
@@ -37,6 +38,13 @@ router.get(
   authorizeRoles("operator", "admin"),
   validate(milkCollectionQuerySchema, "query"),
   getMilkCollections
+);
+router.get(
+  "/export",
+  authenticate,
+  authorizeRoles("operator", "admin"),
+  validate(milkCollectionQuerySchema, "query"),
+  exportMilkCollectionsCSV
 );
 
 module.exports = router;
