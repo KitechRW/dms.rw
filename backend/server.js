@@ -15,6 +15,7 @@ const userRoutes = require("./src/routes/userRoutes");
 const milkCollectionRoutes = require("./src/routes/milkCollectionRoutes");
 const farmerStatementRoutes = require("./src/routes/farmerStatementRoutes");
 const pendingActionsRoutes = require("./src/routes/pendingActionsRoutes");
+const dashboardRoutes = require("./src/routes/dashboardRoutes");
 const app = express();
 
 app.use(cors());
@@ -26,6 +27,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/milk-collections", milkCollectionRoutes);
 app.use("/api", farmerStatementRoutes);
 app.use("/api", pendingActionsRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "API running" });
