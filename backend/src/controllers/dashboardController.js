@@ -14,6 +14,7 @@ const getFarmerDashboardSummary = async (req, res) => {
         $match: {
           farmer: new mongoose.Types.ObjectId(farmerId),
           createdAt: { $gte: startOfMonth },
+          status: "approved"
         },
       },
       {
