@@ -77,11 +77,12 @@ const getFarmerDashboardSummary = async (req, res) => {
       )
     );
   } catch (error) {
+     console.error("Farmer dashboard error:", error);
+
     return res.status(500).json(
       errorResponse(
         "Failed to fetch farmer dashboard summary",
-        "INTERNAL_SERVER_ERROR",
-        error.message
+        "INTERNAL_SERVER_ERROR",  
       )
     );
   }
