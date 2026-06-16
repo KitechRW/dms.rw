@@ -14,7 +14,7 @@ const frontendUsers = [
     last_name: "User",
     email: "operator@dms.rw",
     password: "password",
-    role: "user",
+    role: "operator",
   },
   {
     _id: "2",
@@ -92,8 +92,8 @@ export default function LoginPage() {
 
     if (user.role === "farmer") {
       router.push("/farmer");
-    } else if (user.role === "user") {
-      router.push("/user/dashboard");
+    } else if (user.role === "operator") {
+      router.push("/operator");
     } else {
       router.push("/admin/dashboard");
     }
