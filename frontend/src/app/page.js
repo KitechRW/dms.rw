@@ -8,20 +8,44 @@ import { useAuth } from "@/context/AuthContext";
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [keepSignedIn, setKeepSignedIn] = useState(false);
+const [emailError, setEmailError] = useState("");
+const [passwordError, setPasswordError] = useState("");
 
   async function handleLogin(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
+    setEmailError("");
+setPasswordError("");
+
+let hasError = false;
+
+if (!email.trim()) {
+  setEmailError("Email is required");
+  hasError = true;
+} else if (!/\S+@\S+\.\S+/.test(email)) {
+  setEmailError("Enter a valid email address");
+  hasError = true;
+}
+
+if (!password.trim()) {
+  setPasswordError("Password is required");
+  hasError = true;
+}
+
+if (hasError) {
+  setLoading(false);
+  return;
+}
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -52,14 +76,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-      <h1 className="text-4xl font-bold mb-4 text-sky-700">DMS</h1>
+      <h1 className="text-5xl font-bold mb-2 text-blue-900">DMS.rw</h1>
 
       <form
         onSubmit={handleLogin}
         className="bg-white p-8 rounded-2xl shadow-md w-96"
       >
-        <h2 className="text-xl font-bold mb-5 text-center text-black">
-          Welcome Back
+        <h2 className="text-xl font-semibold mb-5 text-center text-black">
+          Sign In
         </h2>
 
         {error && (
@@ -71,12 +95,20 @@ export default function LoginPage() {
           <label className="block mb-1 text-sm">Email</label>
           <input
             type="email"
-            placeholder="m@example.com"
+            placeholder="operator@dms.rw"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {setEmail(e.target.value);
+  setEmailError("");
+}}
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-sky-200"
             required
           />
+
+         { emailError && (
+  <p className="text-red-500 text-sm mt-1">
+    {emailError}
+  </p>
+)}
         </div>
 
         
@@ -96,7 +128,9 @@ export default function LoginPage() {
               type={showPassword ? "text" : "password"}
               placeholder="********"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {setPassword(e.target.value);
+  setPasswordError("");
+}}
               className="w-full p-2 border rounded pr-10 focus:outline-none focus:ring-2 focus:ring-sky-400"
               required
             />
@@ -108,21 +142,39 @@ export default function LoginPage() {
               👁️
             </span>
           </div>
+          {passwordError && (
+  <p className="text-red-500 text-sm mt-1">
+    {passwordError}
+  </p>
+)}
         </div>
+        <div className="flex items-center gap-2 mb-6">
+  <input
+    type="checkbox"
+    id="keepSignedIn"
+    checked={keepSignedIn}
+    onChange={(e) => setKeepSignedIn(e.target.checked)}
+  />
+  <label htmlFor="keepSignedIn" className="text-sm">
+    Keep me signed in
+  </label>
+</div>
 
-        
-        <button
+ <button
           type="submit"
           disabled={loading}
           className={`w-full p-2 rounded text-white font-semibold transition ${
             loading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-sky-600 to-sky-800 hover:from-sky-500 hover:to-sky-700"
+              : "bg-gradient-to-r from-blue-800 to-blue-900 hover:from-sky-500 hover:to-sky-700"
           }`}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
+      <p className="text-sm text-gray-500 mt-6">
+  Secure connection
+</p>
     </div>
   );
 }
