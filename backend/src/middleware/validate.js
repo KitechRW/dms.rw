@@ -9,7 +9,8 @@ const validate = (schema, source = "body") => (req, res, next) => {
     if (error instanceof ZodError) {
       return res
         .status(400)
-        .json(errorResponse(error.issues[0].message, "VALIDATION_ERROR"));
+        .json(errorResponse(
+            error.issues[0].message, "VALIDATION_ERROR"));
     }
 
     return res.status(500).json(
