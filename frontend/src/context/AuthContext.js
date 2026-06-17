@@ -8,17 +8,23 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("currentUser");
+    const stored = localStorage.getItem("currentUser") ||
+    sessionStorage.getItem("currentUser");
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
-  const login = (userData) => {
+  const login = (userData, KeepSignedIn) => {
+    if (KeepSignedIn) {
     localStorage.setItem("currentUser", JSON.stringify(userData));
+    } else {
+      sessionStorage.setItem("currentUser", JSON.stringify(userData));
+    }
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("currentUser");
     setUser(null);
   };
 

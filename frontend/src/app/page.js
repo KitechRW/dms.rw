@@ -4,6 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import {
+  Lock,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  LogIn,
+} from "lucide-react";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -45,10 +53,10 @@ if (hasError) {
 }
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, keepSignedIn, }),
       });
 
       const data = await res.json();
@@ -57,7 +65,7 @@ if (hasError) {
         setError(data.message || "Login failed");
       } else {
         
-        login(data.user);
+        login(data.user, keepSignedIn);
 
         
         if (data.user.role === "user") {
@@ -76,15 +84,16 @@ if (hasError) {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-      <h1 className="text-5xl font-bold mb-2 text-blue-900">DMS.rw</h1>
+      <div className="w-96 overflow-hidden rounded-1xl shadow-md">
+  <div className="bg-blue-50 py-8 text-center">
+    <h1 className="text-5xl font-bold text-blue-900">DMS.rw</h1>
+    <p className="text-gray-600 mt-2">Sign in to DMS.rw</p>
+  </div>
 
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-2xl shadow-md w-96"
+        className="bg-white p-10 rounded-1xl shadow-md w-96"
       >
-        <h2 className="text-xl font-semibold mb-5 text-center text-black">
-          Sign In
-        </h2>
 
         {error && (
           <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
@@ -93,6 +102,11 @@ if (hasError) {
       
         <div className="mb-4">
           <label className="block mb-1 text-sm">Email</label>
+          <div className="relative">
+    <FaUserCircle
+      size={18}
+      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+    />
           <input
             type="email"
             placeholder="operator@dms.rw"
@@ -100,9 +114,10 @@ if (hasError) {
             onChange={(e) => {setEmail(e.target.value);
   setEmailError("");
 }}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-sky-200"
+            className="w-full pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-sky-200"
             required
           />
+          </div>
 
          { emailError && (
   <p className="text-red-500 text-sm mt-1">
@@ -117,13 +132,17 @@ if (hasError) {
             <label className="text-sm">Password</label>
             <Link
               href="/forgot-password"
-              className="text-sm text-gray-600 hover:text-sky-500 hover:underline"
+              className="text-sm text-blue-700 hover:text-sky-500 hover:underline"
             >
               Forgot password?
             </Link>
           </div>
 
           <div className="relative">
+             <Lock
+    size={18}
+    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+  />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="********"
@@ -131,16 +150,17 @@ if (hasError) {
               onChange={(e) => {setPassword(e.target.value);
   setPasswordError("");
 }}
-              className="w-full p-2 border rounded pr-10 focus:outline-none focus:ring-2 focus:ring-sky-400"
+              className="w-full pl-10 pr-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-sky-400"
               required
             />
+            <button type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+  >
+    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+  </button>
 
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-            >
-              👁️
-            </span>
+            
           </div>
           {passwordError && (
   <p className="text-red-500 text-sm mt-1">
@@ -169,12 +189,17 @@ if (hasError) {
               : "bg-gradient-to-r from-blue-800 to-blue-900 hover:from-sky-500 hover:to-sky-700"
           }`}
         >
-          {loading ? "Signing in..." : "Sign in"}
+          <div className="flex items-center justify-center gap-2">
+    <LogIn size={18} />
+    <span>{loading ? "Signing in..." : "Sign in"}</span>
+  </div>
         </button>
       </form>
-      <p className="text-sm text-gray-500 mt-6">
-  Secure connection
-</p>
+      <div className="bg-blue-50 py-6 flex items-center justify-center gap-2 text-sm text-gray-500">
+  <ShieldCheck size={16} />
+  <span>Secure connection</span>
+</div>
+    </div>
     </div>
   );
 }
