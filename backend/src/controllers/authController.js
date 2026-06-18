@@ -5,7 +5,7 @@ const { jwtSecret, jwtExpiresIn } = require("../config/auth");
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, keepSignedIn } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
@@ -22,7 +22,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
+const expiresIn = keepSignedIn ? "7d" : "8h";
     const token = jwt.sign(
       {
         sub: user._id.toString(),
@@ -30,7 +30,7 @@ const login = async (req, res) => {
         role: user.role,
       },
       jwtSecret,
-      { expiresIn: jwtExpiresIn }
+      { expiresIn}
     );
 
     return res.status(200).json({
