@@ -2,13 +2,22 @@
 
 import { useEffect, useState } from "react";
 
+const frontendAdmins = [
+  {
+    _id: "1",
+    email: "admin@dms.rw",
+  },
+  {
+    _id: "2",
+    email: "superadmin@dms.rw",
+  },
+];
+
 export default function AdminsPage() {
   const [admins, setAdmins] = useState([]);
 
-  const fetchAdmins = async () => {
-    const res = await fetch("/api/admins");
-    const data = await res.json();
-    setAdmins(data.admins);
+  const fetchAdmins = () => {
+    setAdmins(frontendAdmins);
   };
 
   useEffect(() => {

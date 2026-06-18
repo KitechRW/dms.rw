@@ -34,6 +34,13 @@ export default function UsersPage() {
       email: "jane@example.com",
       role: "superadmin",
     },
+    {
+      _id: "3",
+      first_name: "Farmer",
+      last_name: "User",
+      email: "farmer@dms.rw",
+      role: "farmer",
+    },
   ];
 
   // Load users (mock)
@@ -220,6 +227,7 @@ export default function UsersPage() {
             >
               <option value="admin">Admin</option>
               <option value="superadmin">Super Admin</option>
+              <option value="farmer">Farmer</option>
             </select>
 
             <div className="flex justify-end gap-2">
@@ -292,6 +300,7 @@ export default function UsersPage() {
             >
               <option value="admin">Admin</option>
               <option value="superadmin">Super Admin</option>
+              <option value="farmer">Farmer</option>
             </select>
 
             <div className="flex justify-end gap-2">
