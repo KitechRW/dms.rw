@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import OperatorHeader from "../components/header";
 import OperatorSidebar from "../components/sidebar";
 
@@ -254,13 +255,13 @@ export default function OperatorDashboardPage() {
                 </p>
               </div>
 
-              <button
-                type="button"
+              <Link
+                href="/operator/milk-collection/new"
                 className="mt-[-1px] inline-flex h-[34px] w-[139px] items-center justify-center gap-[9px] rounded bg-[#1E3A8A] text-[13px] font-medium leading-[17px] text-white shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
               >
                 <PlusIcon className="h-[11px] w-[11px]" />
                 <span>New Collection</span>
-              </button>
+              </Link>
             </section>
 
             <section className="mt-[58px] grid grid-cols-3 gap-[16px]">
