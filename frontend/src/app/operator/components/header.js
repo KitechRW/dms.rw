@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaBell, FaSearch, FaTh } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 
 const notifications = [
@@ -10,6 +9,20 @@ const notifications = [
   "Jean Bosco delivery was accepted",
   "Export report is ready",
 ];
+
+function MockIcon({ children, className, viewBox }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      viewBox={viewBox}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {children}
+    </svg>
+  );
+}
 
 export default function OperatorHeader() {
   const router = useRouter();
@@ -23,21 +36,22 @@ export default function OperatorHeader() {
   };
 
   return (
-    <header className="flex min-h-14 items-center justify-between gap-3 border-b border-slate-200 bg-[#f7f8fc] px-4 py-3 sm:px-6">
-      <div className="hidden text-lg font-extrabold text-[#082b73] lg:block">
-        DMS.rw
-      </div>
+    <header className="h-16 border-b border-[#E5E7EB] bg-[#F9F9FF]">
+      <div className="flex h-full w-full items-center justify-end gap-5 px-6">
+        <div className="relative w-[255px]">
+          <MockIcon
+            className="absolute left-[11px] top-1/2 h-[17px] w-[17px] -translate-y-1/2 text-[#444651]"
+            viewBox="875.97 26.25 10.5 10.5"
+          >
+            <path d="M885.653 36.75L881.978 33.075C881.687 33.3083 881.351 33.4931 880.972 33.6292C880.593 33.7653 880.189 33.8333 879.762 33.8333C878.702 33.8333 877.805 33.4663 877.071 32.7323C876.337 31.9983 875.97 31.1014 875.97 30.0417C875.97 28.9819 876.337 28.0851 877.071 27.351C877.805 26.617 878.702 26.25 879.762 26.25C880.821 26.25 881.718 26.617 882.452 27.351C883.186 28.0851 883.553 28.9819 883.553 30.0417C883.553 30.4694 883.485 30.8729 883.349 31.2521C883.213 31.6312 883.028 31.9667 882.795 32.2583L886.47 35.9333L885.653 36.75ZM879.762 32.6667C880.491 32.6667 881.111 32.4115 881.621 31.901C882.131 31.3906 882.387 30.7708 882.387 30.0417C882.387 29.3125 882.131 28.6927 881.621 28.1823C881.111 27.6719 880.491 27.4167 879.762 27.4167C879.032 27.4167 878.413 27.6719 877.902 28.1823C877.392 28.6927 877.137 29.3125 877.137 30.0417C877.137 30.7708 877.392 31.3906 877.902 31.901C878.413 32.4115 879.032 32.6667 879.762 32.6667Z" />
+          </MockIcon>
+          <input
+            type="search"
+            placeholder="Search farmer ID"
+            className="h-[37px] w-full rounded-lg border border-[#E5E7EB] bg-[#F3F4F6] pl-[36px] pr-3 text-[14px] text-[#141B2B] outline-none placeholder:text-[#6B7280] focus:border-[#00236F] focus:bg-white"
+          />
+        </div>
 
-      <div className="relative w-full max-w-[320px] lg:ml-auto">
-        <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-500" />
-        <input
-          type="search"
-          placeholder="Search farmer or ID"
-          className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-[#082b73] focus:ring-4 focus:ring-blue-100"
-        />
-      </div>
-
-      <div className="flex items-center gap-3">
         <div className="relative">
           <button
             type="button"
@@ -45,22 +59,24 @@ export default function OperatorHeader() {
               setNotificationsOpen((value) => !value);
               setProfileOpen(false);
             }}
-            className="relative text-base text-slate-700 transition hover:text-[#082b73]"
+            className="relative inline-flex h-9 w-[22px] items-center justify-center text-[#444651] transition hover:text-[#00236F]"
             aria-label="Notifications"
           >
-            <FaBell />
-            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+            <MockIcon className="h-[22px] w-[22px]" viewBox="1136.57 22 15.2 19">
+              <path d="M1136.57 38.15V36.25H1138.47V29.6C1138.47 28.2858 1138.87 27.1181 1139.66 26.0969C1140.45 25.0756 1141.48 24.4067 1142.75 24.09V23.425C1142.75 23.0292 1142.88 22.6927 1143.16 22.4156C1143.44 22.1385 1143.77 22 1144.17 22C1144.57 22 1144.9 22.1385 1145.18 22.4156C1145.46 22.6927 1145.6 23.0292 1145.6 23.425V24.09C1146.86 24.4067 1147.89 25.0756 1148.68 26.0969C1149.47 27.1181 1149.87 28.2858 1149.87 29.6V36.25H1151.77V38.15H1136.57ZM1144.17 41C1143.65 41 1143.2 40.814 1142.83 40.4419C1142.46 40.0698 1142.27 39.6225 1142.27 39.1H1146.07C1146.07 39.6225 1145.88 40.0698 1145.51 40.4419C1145.14 40.814 1144.69 41 1144.17 41ZM1140.37 36.25H1147.97V29.6C1147.97 28.555 1147.6 27.6604 1146.85 26.9163C1146.11 26.1721 1145.22 25.8 1144.17 25.8C1143.13 25.8 1142.23 26.1721 1141.49 26.9163C1140.74 27.6604 1140.37 28.555 1140.37 29.6V36.25Z" />
+            </MockIcon>
+            <span className="absolute right-[5px] top-[5px] h-[8px] w-[8px] rounded-full bg-[#EF4444]" />
           </button>
 
           {notificationsOpen && (
-            <div className="absolute right-0 z-50 mt-3 w-[260px] rounded border border-slate-200 bg-white shadow-lg">
-              <div className="border-b border-slate-100 px-3 py-2 text-sm font-bold text-slate-950">
+            <div className="absolute right-0 z-50 mt-3 w-[260px] rounded border border-[#E5E7EB] bg-white shadow-lg">
+              <div className="border-b border-[#E5E7EB] px-3 py-2 text-sm font-bold text-[#141B2B]">
                 Notifications
               </div>
               {notifications.map((item) => (
                 <div
                   key={item}
-                  className="border-b border-slate-100 px-3 py-2.5 text-xs font-medium text-slate-600 last:border-b-0"
+                  className="border-b border-[#E5E7EB] px-3 py-2.5 text-xs font-medium text-[#6B7280] last:border-b-0"
                 >
                   {item}
                 </div>
@@ -71,10 +87,12 @@ export default function OperatorHeader() {
 
         <button
           type="button"
-          className="text-base text-slate-700 transition hover:text-[#082b73]"
+          className="inline-flex h-9 w-[22px] items-center justify-center text-[#444651] transition hover:text-[#00236F]"
           aria-label="Apps"
         >
-          <FaTh />
+          <MockIcon className="h-[22px] w-[22px]" viewBox="1176.58 23.9 15.2 15.2">
+            <path d="M1178.48 39.1C1177.96 39.1 1177.51 38.914 1177.14 38.5419C1176.77 38.1698 1176.58 37.7225 1176.58 37.2C1176.58 36.6775 1176.77 36.2302 1177.14 35.8581C1177.51 35.486 1177.96 35.3 1178.48 35.3C1179 35.3 1179.45 35.486 1179.82 35.8581C1180.19 36.2302 1180.38 36.6775 1180.38 37.2C1180.38 37.7225 1180.19 38.1698 1179.82 38.5419C1179.45 38.914 1179 39.1 1178.48 39.1ZM1184.18 39.1C1183.66 39.1 1183.21 38.914 1182.84 38.5419C1182.47 38.1698 1182.28 37.7225 1182.28 37.2C1182.28 36.6775 1182.47 36.2302 1182.84 35.8581C1183.21 35.486 1183.66 35.3 1184.18 35.3C1184.7 35.3 1185.15 35.486 1185.52 35.8581C1185.89 36.2302 1186.08 36.6775 1186.08 37.2C1186.08 37.7225 1185.89 38.1698 1185.52 38.5419C1185.15 38.914 1184.7 39.1 1184.18 39.1ZM1189.88 39.1C1189.36 39.1 1188.91 38.914 1188.54 38.5419C1188.17 38.1698 1187.98 37.7225 1187.98 37.2C1187.98 36.6775 1188.17 36.2302 1188.54 35.8581C1188.91 35.486 1189.36 35.3 1189.88 35.3C1190.4 35.3 1190.85 35.486 1191.22 35.8581C1191.59 36.2302 1191.78 36.6775 1191.78 37.2C1191.78 37.7225 1191.59 38.1698 1191.22 38.5419C1190.85 38.914 1190.4 39.1 1189.88 39.1ZM1178.48 33.4C1177.96 33.4 1177.51 33.214 1177.14 32.8419C1176.77 32.4698 1176.58 32.0225 1176.58 31.5C1176.58 30.9775 1176.77 30.5302 1177.14 30.1581C1177.51 29.786 1177.96 29.6 1178.48 29.6C1179 29.6 1179.45 29.786 1179.82 30.1581C1180.19 30.5302 1180.38 30.9775 1180.38 31.5C1180.38 32.0225 1180.19 32.4698 1179.82 32.8419C1179.45 33.214 1179 33.4 1178.48 33.4ZM1184.18 33.4C1183.66 33.4 1183.21 33.214 1182.84 32.8419C1182.47 32.4698 1182.28 32.0225 1182.28 31.5C1182.28 30.9775 1182.47 30.5302 1182.84 30.1581C1183.21 29.786 1183.66 29.6 1184.18 29.6C1184.7 29.6 1185.15 29.786 1185.52 30.1581C1185.89 30.5302 1186.08 30.9775 1186.08 31.5C1186.08 32.0225 1185.89 32.4698 1185.52 32.8419C1185.15 33.214 1184.7 33.4 1184.18 33.4ZM1189.88 33.4C1189.36 33.4 1188.91 33.214 1188.54 32.8419C1188.17 32.4698 1187.98 32.0225 1187.98 31.5C1187.98 30.9775 1188.17 30.5302 1188.54 30.1581C1188.91 29.786 1189.36 29.6 1189.88 29.6C1190.4 29.6 1190.85 29.786 1191.22 30.1581C1191.59 30.5302 1191.78 30.9775 1191.78 31.5C1191.78 32.0225 1191.59 32.4698 1191.22 32.8419C1190.85 33.214 1190.4 33.4 1189.88 33.4ZM1178.48 27.7C1177.96 27.7 1177.51 27.514 1177.14 27.1419C1176.77 26.7698 1176.58 26.3225 1176.58 25.8C1176.58 25.2775 1176.77 24.8302 1177.14 24.4581C1177.51 24.086 1177.96 23.9 1178.48 23.9C1179 23.9 1179.45 24.086 1179.82 24.4581C1180.19 24.8302 1180.38 25.2775 1180.38 25.8C1180.38 26.3225 1180.19 26.7698 1179.82 27.1419C1179.45 27.514 1179 27.7 1178.48 27.7ZM1184.18 27.7C1183.66 27.7 1183.21 27.514 1182.84 27.1419C1182.47 26.7698 1182.28 26.3225 1182.28 25.8C1182.28 25.2775 1182.47 24.8302 1182.84 24.4581C1183.21 24.086 1183.66 23.9 1184.18 23.9C1184.7 23.9 1185.15 24.086 1185.52 24.4581C1185.89 24.8302 1186.08 25.2775 1186.08 25.8C1186.08 26.3225 1185.89 26.7698 1185.52 27.1419C1185.15 27.514 1184.7 27.7 1184.18 27.7ZM1189.88 27.7C1189.36 27.7 1188.91 27.514 1188.54 27.1419C1188.17 26.7698 1187.98 26.3225 1187.98 25.8C1187.98 25.2775 1188.17 24.8302 1188.54 24.4581C1188.91 24.086 1189.36 23.9 1189.88 23.9C1190.4 23.9 1190.85 24.086 1191.22 24.4581C1191.59 24.8302 1191.78 25.2775 1191.78 25.8C1191.78 26.3225 1191.59 26.7698 1191.22 27.1419C1190.85 27.514 1190.4 27.7 1189.88 27.7Z" />
+          </MockIcon>
         </button>
 
         <div className="relative">
@@ -84,7 +102,7 @@ export default function OperatorHeader() {
               setProfileOpen((value) => !value);
               setNotificationsOpen(false);
             }}
-            className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-white transition hover:ring-[#082b73]"
+            className="h-[31px] w-[31px] overflow-hidden rounded-[12px] border border-[#E5E7EB] bg-white"
             aria-label="Operator account"
           >
             <img
@@ -95,11 +113,11 @@ export default function OperatorHeader() {
           </button>
 
           {profileOpen && (
-            <div className="absolute right-0 z-50 mt-2 w-36 rounded border border-slate-200 bg-white py-1.5 shadow-lg">
+            <div className="absolute right-0 z-50 mt-2 w-36 rounded border border-[#E5E7EB] bg-white py-1.5 shadow-lg">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full px-3 py-2 text-left text-xs font-medium text-slate-700 hover:bg-slate-50"
+                className="w-full px-3 py-2 text-left text-xs font-medium text-[#444651] hover:bg-[#F9F9FF]"
               >
                 Sign out
               </button>
