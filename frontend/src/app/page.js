@@ -68,12 +68,15 @@ if (hasError) {
         login(data.user, keepSignedIn);
 
         
-        if (data.user.role === "user") {
-          router.push("/user/dashboard");
-        } else {
-          
-          router.push("/admin/dashboard");
-        }
+        if (data.user.role === "admin") {
+  router.push("/admin/dashboard");
+} else if (data.user.role === "operator") {
+  router.push("/operator/dashboard");
+} else if (data.user.role === "farmer") {
+  router.push("/farmer/dashboard");
+} else {
+  setError("Unknown user role");
+}
       }
     } catch {
       setError("Something went wrong");
