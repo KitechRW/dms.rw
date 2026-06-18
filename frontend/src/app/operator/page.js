@@ -1,181 +1,238 @@
 "use client";
 
 import {
-  FaDownload,
-  FaEdit,
-  FaExclamationTriangle,
-  FaPlus,
-} from "react-icons/fa";
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Edit3,
+  Plus,
+  TriangleAlert,
+  TrendingUp,
+  UserCheck,
+} from "lucide-react";
 import OperatorHeader from "./components/header";
 import OperatorSidebar from "./components/sidebar";
 
 const stats = [
-  { label: "Today's milk (L)", value: "4,250", note: "+12% vs yesterday", tone: "success" },
-  { label: "Farmers active today", value: "142", note: "Checked in today", tone: "neutral" },
-  { label: "Entries to verify", value: "18", note: "Requires attention", tone: "warning" },
+  {
+    label: "Today's milk (L)",
+    value: "4,250",
+    note: "+12% vs yesterday",
+    noteClass: "text-emerald-600",
+    icon: TrendingUp,
+  },
+  {
+    label: "Farmers active today",
+    value: "142",
+    note: "Checked in today",
+    noteClass: "text-[#6B7280]",
+    icon: UserCheck,
+  },
+  {
+    label: "Entries to verify",
+    value: "18",
+    note: "Requires attention",
+    noteClass: "text-amber-500",
+    icon: TriangleAlert,
+  },
 ];
 
 const entries = [
-  { farmer: "Jean Bosco", initial: "J", id: "#FM-1042", volume: "45.5", status: "Accepted", time: "10:42 AM" },
-  { farmer: "Marie Claire", initial: "M", id: "#FM-2931", volume: "120.0", status: "Accepted", time: "10:35 AM" },
-  { farmer: "Emmanuel N.", initial: "E", id: "#FM-0844", volume: "32.2", status: "Hold", time: "10:15 AM" },
-  { farmer: "Aline Uwera", initial: "A", id: "#FM-1102", volume: "15.0", status: "Rejected", time: "09:55 AM" },
+  {
+    farmer: "Jean Bosco",
+    initial: "J",
+    id: "#FM-1042",
+    volume: "45.5",
+    status: "Accepted",
+    time: "10:42 AM",
+  },
+  {
+    farmer: "Marie Claire",
+    initial: "M",
+    id: "#FM-2931",
+    volume: "120.0",
+    status: "Accepted",
+    time: "10:35 AM",
+  },
+  {
+    farmer: "Emmanuel N.",
+    initial: "E",
+    id: "#FM-0844",
+    volume: "32.2",
+    status: "Hold",
+    time: "10:15 AM",
+  },
+  {
+    farmer: "Aline Uwera",
+    initial: "A",
+    id: "#FM-1102",
+    volume: "15.0",
+    status: "Rejected",
+    time: "09:55 AM",
+  },
 ];
 
 const statusStyles = {
-  Accepted: "bg-emerald-100 text-emerald-700",
-  Hold: "bg-amber-100 text-amber-700",
-  Rejected: "bg-red-100 text-red-700",
+  Accepted: "w-[109px] bg-[#D1FAE5] text-[#047857]",
+  Hold: "w-[80px] bg-[#FEF3C7] text-[#B45309]",
+  Rejected: "w-[91px] bg-[#FFDAD6] text-[#B42318]",
 };
 
 export default function OperatorDashboardPage() {
   return (
-    <div className="min-h-screen bg-[#f7f8fc] text-slate-950">
-      <div className="flex">
+    <div className="min-h-screen bg-[#F9F9FF] text-[#141B2B]">
+      <div className="flex min-h-screen min-w-[1280px]">
         <OperatorSidebar />
 
-        <div className="min-h-screen flex-1">
+        <div className="w-[1020px] shrink-0">
           <OperatorHeader />
 
-          <main className="px-4 py-6 sm:px-6 lg:px-8">
-            <section className="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <main className="w-full px-[25px] pb-0 pt-[26px]">
+            <section className="mb-[20px] flex items-start justify-between">
               <div>
-                <h1 className="text-2xl font-extrabold text-slate-950">
+                <h1 className="text-[25px] font-bold leading-[30px] text-[#141B2B]">
                   Overview
                 </h1>
-                <p className="mt-1 text-sm text-slate-600">
-                  Today's collections and recent activity.
+                <p className="mt-[7px] text-[15px] leading-[20px] text-[#6B7280]">
+                  Today's collection summary and recent farmer entries.
                 </p>
               </div>
 
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex shrink-0 items-center gap-3">
                 <button
                   type="button"
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#082b73] px-4 text-sm font-bold text-white shadow-sm transition hover:bg-[#0b3a94]"
+                  className="inline-flex h-[34px] items-center justify-center gap-2 rounded-lg bg-[#00236F] px-[26px] text-[13px] font-medium text-white transition hover:bg-[#082f86]"
                 >
-                  <FaPlus className="text-xs" />
-                  Quick Entry
+                  <Plus size={15} strokeWidth={2.25} />
+                  <span>Quick Entry</span>
                 </button>
                 <button
                   type="button"
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#082b73] bg-white px-4 text-sm font-bold text-[#082b73] transition hover:bg-blue-50"
+                  className="inline-flex h-[34px] items-center justify-center gap-2 rounded-lg border border-[#00236F] bg-[#F9F9FF] px-[19px] text-[13px] font-medium text-[#00236F] transition hover:bg-white"
                 >
-                  <FaDownload className="text-xs" />
-                  Export
+                  <Download size={14} strokeWidth={2.1} />
+                  <span>Export</span>
                 </button>
               </div>
             </section>
 
-            <section className="mb-5 grid gap-4 md:grid-cols-3">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+        <section className="mb-4 grid grid-cols-3 gap-[16px]">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+
+            return (
+              <article
+                key={stat.label}
+                className="h-[118px] rounded-[10px] border border-[#E5E7EB] bg-white px-6 pb-5 pt-[18px]"
+              >
+                <p className="text-[12px] font-semibold uppercase leading-4 tracking-[0.04em] text-[#6B7280]">
+                  {stat.label}
+                </p>
+                <p className="mt-[25px] text-[30px] font-bold leading-8 text-[#141B2B]">
+                  {stat.value}
+                </p>
+                <p
+                  className={`mt-[2px] inline-flex items-center gap-[7px] text-[14px] font-semibold leading-5 ${stat.noteClass}`}
                 >
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-600">
-                    {stat.label}
-                  </p>
-                  <p className="mt-6 text-3xl font-extrabold text-slate-950">
-                    {stat.value}
-                  </p>
-                  <p
-                    className={`mt-1.5 text-sm font-bold ${
-                      stat.tone === "success"
-                        ? "text-emerald-700"
-                        : stat.tone === "warning"
-                          ? "text-orange-500"
-                          : "text-slate-600"
-                    }`}
+                  <Icon size={14} strokeWidth={2} />
+                  {stat.note}
+                </p>
+              </article>
+            );
+          })}
+            </section>
+
+            <section className="overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white">
+          <div className="flex h-[61px] items-center justify-between border-b border-[#E5E7EB] bg-[#F9F9FF] px-6">
+            <h2 className="text-[18px] font-bold leading-6 text-[#141B2B]">
+              Latest Entries
+            </h2>
+            <button
+              type="button"
+              className="text-[14px] font-medium leading-5 text-[#00236F] transition hover:text-[#082f86]"
+            >
+              View All
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[900px] table-fixed text-left">
+              <thead className="h-10 bg-[#F3F4F6] text-[12px] font-semibold uppercase leading-4 tracking-[0.04em] text-[#6B7280]">
+                <tr>
+                  <th className="w-[33%] px-6 py-3">Farmer Name</th>
+                  <th className="w-[14%] px-4 py-3">ID</th>
+                  <th className="w-[17%] px-4 py-3">Volume (L)</th>
+                  <th className="w-[16%] px-4 py-3">Status</th>
+                  <th className="w-[13%] px-4 py-3">Time</th>
+                  <th className="w-[7%] px-4 py-3 text-center">Edit</th>
+                </tr>
+              </thead>
+              <tbody className="text-[14px] leading-5">
+                {entries.map((entry) => (
+                  <tr
+                    key={entry.id}
+                    className="h-[77px] border-t border-[#E5E7EB] first:border-t-0"
                   >
-                    {stat.tone === "warning" && (
-                      <FaExclamationTriangle className="mr-1 inline text-xs" />
-                    )}
-                    {stat.note}
-                  </p>
-                </div>
-              ))}
-            </section>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#DCE2F7] text-[14px] font-bold text-[#00236F]">
+                          {entry.initial}
+                        </span>
+                        <span className="font-medium text-[#141B2B]">
+                          {entry.farmer}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 font-normal text-[#444651]">
+                      {entry.id}
+                    </td>
+                    <td className="px-4 py-4 font-medium text-[#141B2B]">
+                      {entry.volume}
+                    </td>
+                    <td className="px-4 py-4">
+                      <span
+                        className={`inline-flex h-9 items-center justify-center rounded-sm text-[13px] font-medium ${statusStyles[entry.status]}`}
+                      >
+                        {entry.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 font-normal text-[#444651]">
+                      {entry.time}
+                    </td>
+                    <td className="px-4 py-4 text-center">
+                      <button
+                        type="button"
+                        className="inline-flex h-8 w-8 items-center justify-center text-[#444651] transition hover:text-[#00236F]"
+                        aria-label={`Edit ${entry.farmer}`}
+                      >
+                        <Edit3 size={16} strokeWidth={2} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-            <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-              <div className="flex items-center justify-between px-5 py-5">
-                <h2 className="text-lg font-extrabold text-slate-950">
-                  Latest Entries
-                </h2>
-                <button
-                  type="button"
-                  className="text-sm font-bold text-[#082b73] hover:text-sky-700"
-                >
-                  View All
-                </button>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[820px] text-left">
-                  <thead className="bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-600">
-                    <tr>
-                      <th className="px-4 py-3">Farmer Name</th>
-                      <th className="px-4 py-3">ID</th>
-                      <th className="px-4 py-3">Volume (L)</th>
-                      <th className="px-4 py-3">Status</th>
-                      <th className="px-4 py-3">Time</th>
-                      <th className="px-4 py-3">Edit</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {entries.map((entry) => (
-                      <tr key={entry.id} className="border-t border-slate-100">
-                        <td className="px-5 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#e2e8fb] text-sm font-extrabold text-[#082b73]">
-                              {entry.initial}
-                            </div>
-                            <span className="text-sm font-medium text-slate-950">
-                              {entry.farmer}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-5 py-4 text-sm text-slate-600">
-                          {entry.id}
-                        </td>
-                        <td className="px-5 py-4 text-sm font-bold text-slate-950">
-                          {entry.volume}
-                        </td>
-                        <td className="px-5 py-4">
-                          <span
-                            className={`inline-flex min-w-[78px] justify-center rounded px-2.5 py-1.5 text-xs font-bold ${statusStyles[entry.status]}`}
-                          >
-                            {entry.status}
-                          </span>
-                        </td>
-                        <td className="px-5 py-4 text-sm text-slate-600">
-                          {entry.time}
-                        </td>
-                        <td className="px-5 py-4">
-                          <button
-                            type="button"
-                            className="text-base text-slate-600 transition hover:text-[#082b73]"
-                            aria-label={`Edit ${entry.farmer}`}
-                          >
-                            <FaEdit />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-slate-100 px-5 py-4 text-sm text-slate-600">
-                <span>1-4 of 142</span>
-                <div className="flex gap-5 text-lg text-slate-700">
-                  <button type="button" aria-label="Previous page">
-                    &lt;
-                  </button>
-                  <button type="button" aria-label="Next page">
-                    &gt;
-                  </button>
-                </div>
-              </div>
+          <div className="flex h-[42px] items-center justify-between border-t border-[#E5E7EB] bg-[#F9F9FF] px-6 text-[14px] leading-5 text-[#444651]">
+            <span>1-4 of 142</span>
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                className="inline-flex h-8 w-8 items-center justify-center transition hover:text-[#00236F]"
+                aria-label="Previous page"
+              >
+                <ChevronLeft size={18} strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                className="inline-flex h-8 w-8 items-center justify-center transition hover:text-[#00236F]"
+                aria-label="Next page"
+              >
+                <ChevronRight size={18} strokeWidth={2} />
+              </button>
+            </div>
+          </div>
             </section>
           </main>
         </div>
