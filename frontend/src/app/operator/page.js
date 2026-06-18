@@ -116,123 +116,123 @@ export default function OperatorDashboardPage() {
               </div>
             </section>
 
-        <section className="mb-4 grid grid-cols-3 gap-[16px]">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
+            <section className="mb-4 grid grid-cols-3 gap-[16px]">
+              {stats.map((stat) => {
+                const Icon = stat.icon;
 
-            return (
-              <article
-                key={stat.label}
-                className="h-[118px] rounded-[10px] border border-[#E5E7EB] bg-white px-6 pb-5 pt-[18px]"
-              >
-                <p className="text-[12px] font-semibold uppercase leading-4 tracking-[0.04em] text-[#6B7280]">
-                  {stat.label}
-                </p>
-                <p className="mt-[25px] text-[30px] font-bold leading-8 text-[#141B2B]">
-                  {stat.value}
-                </p>
-                <p
-                  className={`mt-[2px] inline-flex items-center gap-[7px] text-[14px] font-semibold leading-5 ${stat.noteClass}`}
-                >
-                  <Icon size={14} strokeWidth={2} />
-                  {stat.note}
-                </p>
-              </article>
-            );
-          })}
+                return (
+                  <article
+                    key={stat.label}
+                    className="h-[118px] rounded-[10px] border border-[#E5E7EB] bg-white px-6 pb-5 pt-[18px]"
+                  >
+                    <p className="text-[12px] font-semibold uppercase leading-4 tracking-[0.04em] text-[#6B7280]">
+                      {stat.label}
+                    </p>
+                    <p className="mt-[25px] text-[30px] font-bold leading-8 text-[#141B2B]">
+                      {stat.value}
+                    </p>
+                    <p
+                      className={`mt-[2px] inline-flex items-center gap-[7px] text-[14px] font-semibold leading-5 ${stat.noteClass}`}
+                    >
+                      <Icon size={14} strokeWidth={2} />
+                      {stat.note}
+                    </p>
+                  </article>
+                );
+              })}
             </section>
 
             <section className="overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white">
-          <div className="flex h-[61px] items-center justify-between border-b border-[#E5E7EB] bg-[#F9F9FF] px-6">
-            <h2 className="text-[18px] font-bold leading-6 text-[#141B2B]">
-              Latest Entries
-            </h2>
-            <button
-              type="button"
-              className="text-[14px] font-medium leading-5 text-[#00236F] transition hover:text-[#082f86]"
-            >
-              View All
-            </button>
-          </div>
+              <div className="flex h-[61px] items-center justify-between border-b border-[#E5E7EB] bg-[#F9F9FF] px-6">
+                <h2 className="text-[18px] font-bold leading-6 text-[#141B2B]">
+                  Latest Entries
+                </h2>
+                <button
+                  type="button"
+                  className="text-[14px] font-medium leading-5 text-[#00236F] transition hover:text-[#082f86]"
+                >
+                  View All
+                </button>
+              </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] table-fixed text-left">
-              <thead className="h-10 bg-[#F3F4F6] text-[12px] font-semibold uppercase leading-4 tracking-[0.04em] text-[#6B7280]">
-                <tr>
-                  <th className="w-[33%] px-6 py-3">Farmer Name</th>
-                  <th className="w-[14%] px-4 py-3">ID</th>
-                  <th className="w-[17%] px-4 py-3">Volume (L)</th>
-                  <th className="w-[16%] px-4 py-3">Status</th>
-                  <th className="w-[13%] px-4 py-3">Time</th>
-                  <th className="w-[7%] px-4 py-3 text-center">Edit</th>
-                </tr>
-              </thead>
-              <tbody className="text-[14px] leading-5">
-                {entries.map((entry) => (
-                  <tr
-                    key={entry.id}
-                    className="h-[77px] border-t border-[#E5E7EB] first:border-t-0"
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[900px] table-fixed text-left">
+                  <thead className="h-10 bg-[#F3F4F6] text-[12px] font-semibold uppercase leading-4 tracking-[0.04em] text-[#6B7280]">
+                    <tr>
+                      <th className="w-[33%] px-6 py-3">Farmer Name</th>
+                      <th className="w-[14%] px-4 py-3">ID</th>
+                      <th className="w-[17%] px-4 py-3">Volume (L)</th>
+                      <th className="w-[16%] px-4 py-3">Status</th>
+                      <th className="w-[13%] px-4 py-3">Time</th>
+                      <th className="w-[7%] px-4 py-3 text-center">Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-[14px] leading-5">
+                    {entries.map((entry) => (
+                      <tr
+                        key={entry.id}
+                        className="h-[77px] border-t border-[#E5E7EB] first:border-t-0"
+                      >
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#DCE2F7] text-[14px] font-bold text-[#00236F]">
+                              {entry.initial}
+                            </span>
+                            <span className="font-medium text-[#141B2B]">
+                              {entry.farmer}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 font-normal text-[#444651]">
+                          {entry.id}
+                        </td>
+                        <td className="px-4 py-4 font-medium text-[#141B2B]">
+                          {entry.volume}
+                        </td>
+                        <td className="px-4 py-4">
+                          <span
+                            className={`inline-flex h-9 items-center justify-center rounded-sm text-[13px] font-medium ${statusStyles[entry.status]}`}
+                          >
+                            {entry.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 font-normal text-[#444651]">
+                          {entry.time}
+                        </td>
+                        <td className="px-4 py-4 text-center">
+                          <button
+                            type="button"
+                            className="inline-flex h-8 w-8 items-center justify-center text-[#444651] transition hover:text-[#00236F]"
+                            aria-label={`Edit ${entry.farmer}`}
+                          >
+                            <Edit3 size={16} strokeWidth={2} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="flex h-[42px] items-center justify-between border-t border-[#E5E7EB] bg-[#F9F9FF] px-6 text-[14px] leading-5 text-[#444651]">
+                <span>1-4 of 142</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    className="inline-flex h-8 w-8 items-center justify-center transition hover:text-[#00236F]"
+                    aria-label="Previous page"
                   >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#DCE2F7] text-[14px] font-bold text-[#00236F]">
-                          {entry.initial}
-                        </span>
-                        <span className="font-medium text-[#141B2B]">
-                          {entry.farmer}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 font-normal text-[#444651]">
-                      {entry.id}
-                    </td>
-                    <td className="px-4 py-4 font-medium text-[#141B2B]">
-                      {entry.volume}
-                    </td>
-                    <td className="px-4 py-4">
-                      <span
-                        className={`inline-flex h-9 items-center justify-center rounded-sm text-[13px] font-medium ${statusStyles[entry.status]}`}
-                      >
-                        {entry.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 font-normal text-[#444651]">
-                      {entry.time}
-                    </td>
-                    <td className="px-4 py-4 text-center">
-                      <button
-                        type="button"
-                        className="inline-flex h-8 w-8 items-center justify-center text-[#444651] transition hover:text-[#00236F]"
-                        aria-label={`Edit ${entry.farmer}`}
-                      >
-                        <Edit3 size={16} strokeWidth={2} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="flex h-[42px] items-center justify-between border-t border-[#E5E7EB] bg-[#F9F9FF] px-6 text-[14px] leading-5 text-[#444651]">
-            <span>1-4 of 142</span>
-            <div className="flex items-center gap-4">
-              <button
-                type="button"
-                className="inline-flex h-8 w-8 items-center justify-center transition hover:text-[#00236F]"
-                aria-label="Previous page"
-              >
-                <ChevronLeft size={18} strokeWidth={2} />
-              </button>
-              <button
-                type="button"
-                className="inline-flex h-8 w-8 items-center justify-center transition hover:text-[#00236F]"
-                aria-label="Next page"
-              >
-                <ChevronRight size={18} strokeWidth={2} />
-              </button>
-            </div>
-          </div>
+                    <ChevronLeft size={18} strokeWidth={2} />
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex h-8 w-8 items-center justify-center transition hover:text-[#00236F]"
+                    aria-label="Next page"
+                  >
+                    <ChevronRight size={18} strokeWidth={2} />
+                  </button>
+                </div>
+              </div>
             </section>
           </main>
         </div>
