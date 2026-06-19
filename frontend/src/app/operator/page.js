@@ -1,5 +1,4 @@
 "use client";
-
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,6 +11,9 @@ import {
 } from "lucide-react";
 import OperatorHeader from "./components/header";
 import OperatorSidebar from "./components/sidebar";
+import { useState, useCallback, useEffect } from "react";
+import axios from "axios";
+import MilkEntryForm from "@/app/components/MilkEntryForm";
 
 const stats = [
   {
@@ -37,41 +39,6 @@ const stats = [
   },
 ];
 
-const entries = [
-  {
-    farmer: "Jean Bosco",
-    initial: "J",
-    id: "#FM-1042",
-    volume: "45.5",
-    status: "Accepted",
-    time: "10:42 AM",
-  },
-  {
-    farmer: "Marie Claire",
-    initial: "M",
-    id: "#FM-2931",
-    volume: "120.0",
-    status: "Accepted",
-    time: "10:35 AM",
-  },
-  {
-    farmer: "Emmanuel N.",
-    initial: "E",
-    id: "#FM-0844",
-    volume: "32.2",
-    status: "Hold",
-    time: "10:15 AM",
-  },
-  {
-    farmer: "Aline Uwera",
-    initial: "A",
-    id: "#FM-1102",
-    volume: "15.0",
-    status: "Rejected",
-    time: "09:55 AM",
-  },
-];
-
 const statusStyles = {
   Accepted: "w-[109px] bg-[#D1FAE5] text-[#047857]",
   Hold: "w-[80px] bg-[#FEF3C7] text-[#B45309]",
@@ -79,6 +46,38 @@ const statusStyles = {
 };
 
 export default function OperatorDashboardPage() {
+  const [showForm, setShowForm] = useState(false);
+
+   const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const fetchEntries = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const res = await axios.get(
+        "http://localhost:5000/api/milk-collections"
+      );
+
+      setEntries(res.data?.data || []);
+    } catch (err) {
+      setError("Failed to load entries");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchEntries();
+  }, [fetchEntries]);
+
+   const handleSuccess = async () => {
+    setShowForm(false);
+    await fetchEntries(); 
+  };
   return (
     <div className="min-h-screen bg-[#F9F9FF] text-[#141B2B]">
       <div className="flex min-h-screen min-w-[1280px]">
@@ -101,9 +100,10 @@ export default function OperatorDashboardPage() {
               <div className="flex shrink-0 items-center gap-3">
                 <button
                   type="button"
+                  onClick={() => setShowForm(true)}
                   className="inline-flex h-[34px] items-center justify-center gap-2 rounded-lg bg-[#00236F] px-[26px] text-[13px] font-medium text-white transition hover:bg-[#082f86]"
                 >
-                  <Plus size={15} strokeWidth={2.25} />
+                  <Plus size={15} />
                   <span>Quick Entry</span>
                 </button>
                 <button
@@ -237,6 +237,19 @@ export default function OperatorDashboardPage() {
           </main>
         </div>
       </div>
+            {showForm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={() => setShowForm(false)}
+        >
+          <div
+            className="w-[520px] rounded-xl bg-white p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <MilkEntryForm onSuccess={handleSuccess} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

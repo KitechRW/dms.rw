@@ -92,22 +92,6 @@ export default function OperatorSidebar() {
           );
         })}
       </nav>
-
-      <button
-        type="button"
-        className="absolute bottom-10 left-4 flex h-[34px] w-[226px] items-center justify-center gap-2 rounded-lg border border-[#00236F] bg-[#F9F9FF] text-[13px] font-medium text-[#00236F] transition hover:bg-white"
-      >
-        <svg
-          aria-hidden="true"
-          className="h-[15px] w-[15px]"
-          fill="currentColor"
-          viewBox="88.1267 673.917 8.1667 8.166"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M91.6267 678.583H88.1267V677.417H91.6267V673.917H92.7934V677.417H96.2934V678.583H92.7934V682.083H91.6267V678.583Z" />
-        </svg>
-        <span>Quick Entry</span>
-      </button>
     </aside>
   );
 }
