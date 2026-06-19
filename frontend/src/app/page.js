@@ -86,8 +86,8 @@ if (hasError) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm sm:max-w-md overflow-hidden rounded-1xl shadow-md">
+    <div className="min-h-screen bg-gray-50 px-3">
+      <div className="mx-auto flex min-h-screen w-full max-w-[480px] flex-col overflow-hidden bg-white shadow-md">
   <div className="bg-blue-50 py-8 text-center">
     <h1 className="text-5xl font-bold text-blue-900">DMS.rw</h1>
     <p className="text-gray-600 mt-2">Sign in to DMS.rw</p>
@@ -95,7 +95,7 @@ if (hasError) {
 
       <form
         onSubmit={handleLogin}
-        className="bg-white p-4 sm:p-10 rounded-1xl shadow-md w-full"
+        className="flex-1 bg-white px-6 py-8 sm:px-8 w-full"
       >
 
         {error && (
